@@ -1,0 +1,14 @@
+*~
+*.py[cod]
+
+# Distribution / packaging
+dist/
+*.egg-info/
+# Tests
+nosetests.json
+
+# Virtual Env
+env/
+
+# Documentation
+docs/_build
