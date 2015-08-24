@@ -10,6 +10,13 @@ class TestImageHash(unittest.TestCase):
         ones = str(self.ones)
         self.assertEqual(ones, '010101010101010101010101')
 
-    def test_coverts_string_to_class(self):
-        ones = imagehash.covert_hex_to_image_hash('010101010101010101010101')
+    def test_hex_to_image_returns_same_array(self):
+        ones = imagehash.covert_hex_to_image_hash(str(self.ones))
         self.assertEqual(ones, self.ones)
+
+    def test_two_different_image_hashes_are_unequal(self):
+        twos = imagehash.covert_hex_to_image_hash('020202020202020202020202')
+        self.assertNotEqual(twos, self.ones)
+
+    def test_same_image_hashes_are_equal(self):
+        self.assertEqual(self.ones, self.ones)
