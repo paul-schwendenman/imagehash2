@@ -18,17 +18,20 @@ class ImageHash(object):
     def __sub__(self, other):
         return numpy.absolute(self.array.flatten() - other.array.flatten()).sum() / self.array.size
 
-def average_hash(image, hash_size=8):
+def grayscale_hash(image, hash_size=8):
     '''Take the average of the image'''
     image = image.convert("L").resize((hash_size, hash_size), Image.ANTIALIAS)
     pixels = numpy.array(image.getdata()).reshape((hash_size, hash_size))
-    avg = pixels.mean()
-    diff = pixels > avg
-    return ImageHash(diff)
+    return ImageHash(pixels)
 
-def color_hash(image, hash_size=8):
+def rgb_hash(image, hash_size=8):
     image = image.convert("RGB").resize((hash_size, hash_size), Image.ANTIALIAS)
     pixels = numpy.array(image.getdata()).flatten('F').reshape((3, hash_size, hash_size))
+    return ImageHash(pixels)
+
+def cmyk_hash(image, hash_size=8):
+    image = image.convert("CMYK").resize((hash_size, hash_size), Image.ANTIALIAS)
+    pixels = numpy.array(image.getdata()).flatten('F').reshape((4, hash_size, hash_size))
     return ImageHash(pixels)
 
 def covert_hex_to_image_hash(hex_string):
