@@ -69,13 +69,13 @@ def supersearch(args):
     c = collections.Counter(item[0] for item in l)
     print(sorted(c.most_common(), key=lambda item: item[0]))
 
-    command = ['feh', '-t', '-F', '-y 150', '-E 150']
+    command = []
     for strength, item in sorted(l, key=lambda item: item[0]):
-        if strength <= args['threshold']:
+        if args['threshold'] < 0 or strength <= args['threshold']:
             print('{} count: {} stength: {}'.format(db_hash[item][0], len(db_hash[item]), strength))
             command.append(os.path.join(args["dataset"], db_hash[item][0]))
-    if len(command) > 2:
-        subprocess.call(command)
+    if command:
+        subprocess.call(['feh', '-t', '-F', '-y 150', '-E 150'] + command)
 
 
 def search(args):
