@@ -1,6 +1,7 @@
 import unittest
 import imagehash
 import numpy
+from PIL import Image
 
 class TestImageHash(unittest.TestCase):
     def setUp(self):
@@ -35,3 +36,31 @@ class TestImageHash(unittest.TestCase):
 
     def test_image_hash_subtraction_is_associative(self):
         self.assertEqual(self.black - self.gray, self.gray - self.black)
+
+class TestHashes(unittest.TestCase):
+    def setUp(self):
+        self.black = Image.new('RGB', (600, 400))
+        self.white = Image.new('RGB', (600, 400), color='white')
+        self.red = Image.new('RGB', (600, 400), color='red')
+        self.blue = Image.new('RGB', (600, 400), color='blue')
+        self.green = Image.new('RGB', (600, 400), color='green')
+        self.yellow = Image.new('RGB', (600, 400), color='yellow')
+
+class TestColorHash(TestHashes):
+    def test_white_returns_all_fs(self):
+        self.assertEqual(str(imagehash.color_hash(self.white, 2)), 'ffffffffffffffffffffffff')
+
+    def test_black_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.color_hash(self.black, 2)), '000000000000000000000000')
+
+    def test_blue_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.color_hash(self.blue, 2)), '0000000000000000ffffffff')
+
+    def test_red_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.color_hash(self.red, 2)), 'ffffffff0000000000000000')
+
+    def test_green_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.color_hash(self.green, 2)), '000000008080808000000000')
+
+    def test_yellow_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.color_hash(self.yellow, 2)), 'ffffffffffffffff00000000')
