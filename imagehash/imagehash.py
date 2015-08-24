@@ -24,14 +24,9 @@ def grayscale_hash(image, hash_size=8):
     pixels = numpy.array(image.getdata()).reshape((hash_size, hash_size))
     return ImageHash(pixels)
 
-def rgb_hash(image, hash_size=8):
+def color_hash(image, hash_size=8):
     image = image.convert("RGB").resize((hash_size, hash_size), Image.ANTIALIAS)
     pixels = numpy.array(image.getdata()).flatten('F').reshape((3, hash_size, hash_size))
-    return ImageHash(pixels)
-
-def cmyk_hash(image, hash_size=8):
-    image = image.convert("CMYK").resize((hash_size, hash_size), Image.ANTIALIAS)
-    pixels = numpy.array(image.getdata()).flatten('F').reshape((4, hash_size, hash_size))
     return ImageHash(pixels)
 
 def hex_to_hash(hex_string):

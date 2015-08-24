@@ -20,27 +20,24 @@ def index(args):
     '''Process and index a dataset for futher inspection'''
     # open the shelve database
     db = shelve.open(args["shelve"], writeback=True)
-    db['grayhash'] = db.get('dhash', {})
-    db['rgbhash'] = db.get('phash', {})
-    db['cmykhash'] = db.get('ahash', {})
+    db['grayscale'] = db.get('grayscale', {})
+    db['color'] = db.get('color', {})
 
     # loop over the image dataset
     for imagePath in glob.iglob(os.path.join(args['dataset'], '*.JPG')):
         # load the image and compute the difference hash
         image = Image.open(imagePath)
         ghash = str(imagehash.grayscale_hash(image))
-        rhash = str(imagehash.rgb_hash(image))
-        chash = str(imagehash.cmyk_hash(image))
+        chash = str(imagehash.color_hash(image))
 
         # extract the filename from the path and update the database
         # using the hash as the key and the filename append to the
         # list of values
         filename = os.path.abspath(imagePath)
-        db['grayhash'][ghash] = db['grayhash'].get(ghash, []) + [filename]
-        db['rgbhash'][rhash] = db['rgbhash'].get(rhash, []) + [filename]
-        db['cmykhash'][chash] = db['cmykhash'].get(chash, []) + [filename]
+        db['grayscale'][ghash] = db['grayscale'].get(ghash, []) + [filename]
+        db['color'][chash] = db['color'].get(chash, []) + [filename]
 
-    print('{} files indexed'.format(len(db['grayhash'].items())))
+    print('{} files indexed'.format(len(db['color'].items())))
 
     # close the shelf database
     db.close()
@@ -55,13 +52,10 @@ def supersearch(args):
 
     if args['hash_name'] == 'grayscale':
         h = imagehash.grayscale_hash(query)
-        db_hash = db['grayhash']
-    elif args['hash_name'] == 'rgb':
-        h = imagehash.rgb_hash(query)
-        db_hash = db['rgbhash']
-    elif args['hash_name'] == 'cmyk':
-        h = imagehash.cmyk_hash(query)
-        db_hash = db['cmykhash']
+        db_hash = db['grayscale']
+    elif args['hash_name'] == 'color':
+        h = imagehash.color_hash(query)
+        db_hash = db['color']
 
     print(collections.Counter(len(hex) for hex, image in db_hash.items()).most_common())
     l = [(h - imagehash.hex_to_hash(hex), hex)  for hex, image in db_hash.items()]
@@ -90,13 +84,10 @@ def search(args):
 
     if args['hash_name'] == 'grayscale':
         h = imagehash.grayscale_hash(query)
-        db_hash = db['grayhash']
-    elif args['hash_name'] == 'rgb':
-        h = imagehash.rgb_hash(query)
-        db_hash = db['rgbhash']
-    elif args['hash_name'] == 'cmyk':
-        h = imagehash.cmyk_hash(query)
-        db_hash = db['cmykhash']
+        db_hash = db['grayscale']
+    elif args['hash_name'] == 'color':
+        h = imagehash.color_hash(query)
+        db_hash = db['color']
 
 
     filenames = db_hash[str(h)]
@@ -175,7 +166,7 @@ def main():
                                help="path to the query image")
     search_parser.add_argument('--hash-name',
                                type=str, default='grayscale',
-                               choices=('rgb', 'cmyk', 'grayscale'),
+                               choices=('color', 'grayscale'),
                                help='set hash function to use for fingerprints')
     # construct the argument parse and parse the arguments
     super_search_parser = subparsers.add_parser('supersearch')
@@ -189,8 +180,8 @@ def main():
                                      type=int, default=12,
                                      help='minimum match threshold')
     super_search_parser.add_argument('--hash-name',
-                                     type=str, default='rgb',
-                                     choices=('rgb', 'cmyk', 'grayscale'),
+                                     type=str, default='color',
+                                     choices=('color', 'grayscale'),
                                      help='set hash function to use for fingerprints')
 
     # construct the argument parse and parse the arguments
