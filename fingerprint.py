@@ -108,6 +108,9 @@ def gather(args):
     # open the output file for writing
     output = open(args["csv"], "w")
 
+    if not os.path.exists(args['output']):
+        os.mkdir(args['output'])
+
     # loop over the input images
     for imagePath in glob.iglob(os.path.join(args["input"], "*/*.jpg")):
         # generate a random filename for the image and copy it to
