@@ -35,7 +35,7 @@ def index(args):
         # extract the filename from the path and update the database
         # using the hash as the key and the filename append to the
         # list of values
-        filename = imagePath[imagePath.rfind("/") + 1:]
+        filename = os.path.abspath(imagePath)
         db['grayhash'][ghash] = db['grayhash'].get(ghash, []) + [filename]
         db['rgbhash'][rhash] = db['rgbhash'].get(rhash, []) + [filename]
         db['cmykhash'][chash] = db['cmykhash'].get(chash, []) + [filename]
@@ -73,7 +73,7 @@ def supersearch(args):
     for strength, item in sorted(l, key=lambda item: item[0]):
         if args['threshold'] < 0 or strength <= args['threshold']:
             print('{} count: {} stength: {}'.format(db_hash[item][0], len(db_hash[item]), strength))
-            command.append(os.path.join(args["dataset"], db_hash[item][0]))
+            command.append(db_hash[item][0])
     if command:
         subprocess.call(['feh', '-t', '-F', '-y 150', '-E 150'] + command)
 
@@ -104,7 +104,7 @@ def search(args):
 
     # loop over the images
     for filename in filenames:
-        print(os.path.join(args["dataset"], filename))
+        print(filename)
         #image = Image.open(args["dataset"] + "/" + filename)
         #image.show()
 
@@ -167,9 +167,6 @@ def main():
                               help="output shelve database")
     # construct the argument parse and parse the arguments
     search_parser = subparsers.add_parser('search')
-    search_parser.add_argument("-d", "--dataset",
-                               required=True,
-                               help="path to dataset of images")
     search_parser.add_argument("-s", "--shelve",
                                required=True,
                                help="output shelve database")
@@ -182,9 +179,6 @@ def main():
                                help='set hash function to use for fingerprints')
     # construct the argument parse and parse the arguments
     super_search_parser = subparsers.add_parser('supersearch')
-    super_search_parser.add_argument("-d", "--dataset",
-                                     required=True,
-                                     help="path to dataset of images")
     super_search_parser.add_argument("-s", "--shelve",
                                      required=True,
                                      help="output shelve database")
