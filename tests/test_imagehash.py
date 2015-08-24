@@ -20,3 +20,12 @@ class TestImageHash(unittest.TestCase):
 
     def test_same_image_hashes_are_equal(self):
         self.assertEqual(self.ones, self.ones)
+
+    def test_two_very_different_image_hashes_have_large_difference(self):
+        twos = imagehash.covert_hex_to_image_hash('020202020202020202020202')
+        self.assertEqual(twos - self.ones, 12)
+
+    def test_two_barely_different_image_hashes_have_small_difference(self):
+        twos = imagehash.covert_hex_to_image_hash('010101010101010101010103')
+        self.assertEqual(twos - self.ones, 2)
+
