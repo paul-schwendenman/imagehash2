@@ -9,3 +9,7 @@ class TestImageHash(unittest.TestCase):
     def test_returns_string_for_ones(self):
         ones = str(self.ones)
         self.assertEqual(ones, '010101010101010101010101')
+
+    def test_coverts_string_to_class(self):
+        ones = imagehash.covert_hex_to_image_hash('010101010101010101010101')
+        self.assertEqual(ones, self.ones)

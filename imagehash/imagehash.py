@@ -22,7 +22,10 @@ class ImageHash(object):
         self.array = array
 
     def __str__(self):
-        return ''.join(hex(num)[2:-1].rjust(2, '0') for num in self.array.flatten()) 
+        return ''.join(hex(num)[2:-1].rjust(2, '0') for num in self.array.flatten())
+
+    def __eq__(self, other):
+        return numpy.array_equal(self.array.flatten(), other.array.flatten())
 
 def covert_hex_to_image_hash(hex_string):
     array = numpy.array([int(num, 16) for num in split_every_n(hex_string, 2)])
