@@ -34,6 +34,6 @@ def cmyk_hash(image, hash_size=8):
     pixels = numpy.array(image.getdata()).flatten('F').reshape((4, hash_size, hash_size))
     return ImageHash(pixels)
 
-def covert_hex_to_image_hash(hex_string):
+def hex_to_hash(hex_string):
     array = numpy.array([int(num, 16) for num in split_every_n(hex_string, 2)])
     return ImageHash(array)
