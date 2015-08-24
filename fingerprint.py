@@ -43,7 +43,7 @@ def index(args):
     db.close()
 
 
-def supersearch(args):
+def search(args):
     '''Search the database for similar files'''
     # open the shelve database
     db = shelve.open(args["shelve"])
@@ -72,7 +72,7 @@ def supersearch(args):
         subprocess.call(['feh', '-t', '-F', '-y 150', '-E 150'] + command)
 
 
-def search(args):
+def match(args):
     '''Search the database for matching files'''
     # open the shelve database
     db = shelve.open(args["shelve"])
@@ -157,29 +157,29 @@ def main():
                               required=True,
                               help="output shelve database")
     # construct the argument parse and parse the arguments
-    search_parser = subparsers.add_parser('search')
-    search_parser.add_argument("-s", "--shelve",
+    match_parser = subparsers.add_parser('match')
+    match_parser.add_argument("-s", "--shelve",
                                required=True,
                                help="output shelve database")
-    search_parser.add_argument("-q", "--query",
+    match_parser.add_argument("-q", "--query",
                                required=True,
                                help="path to the query image")
-    search_parser.add_argument('--hash-name',
+    match_parser.add_argument('--hash-name',
                                type=str, default='grayscale',
                                choices=('color', 'grayscale'),
                                help='set hash function to use for fingerprints')
     # construct the argument parse and parse the arguments
-    super_search_parser = subparsers.add_parser('supersearch')
-    super_search_parser.add_argument("-s", "--shelve",
+    search_parser = subparsers.add_parser('search')
+    search_parser.add_argument("-s", "--shelve",
                                      required=True,
                                      help="output shelve database")
-    super_search_parser.add_argument("-q", "--query",
+    search_parser.add_argument("-q", "--query",
                                      required=True,
                                      help="path to the query image")
-    super_search_parser.add_argument('-t', '--threshold',
+    search_parser.add_argument('-t', '--threshold',
                                      type=int, default=12,
                                      help='minimum match threshold')
-    super_search_parser.add_argument('--hash-name',
+    search_parser.add_argument('--hash-name',
                                      type=str, default='color',
                                      choices=('color', 'grayscale'),
                                      help='set hash function to use for fingerprints')
@@ -202,8 +202,8 @@ def main():
         index(args)
     elif args['subparser_name'] == 'search':
         search(args)
-    elif args['subparser_name'] == 'supersearch':
-        supersearch(args)
+    elif args['subparser_name'] == 'match':
+        match(args)
     elif args['subparser_name'] == 'gather':
         gather(args)
 
