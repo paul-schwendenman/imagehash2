@@ -28,7 +28,7 @@ class ImageHash(object):
         return numpy.array_equal(self.array.flatten(), other.array.flatten())
 
     def __sub__(self, other):
-        return (self.array.flatten() - other.array.flatten()).sum()
+        return numpy.absolute(self.array.flatten() - other.array.flatten()).sum()
 
 def covert_hex_to_image_hash(hex_string):
     array = numpy.array([int(num, 16) for num in split_every_n(hex_string, 2)])

@@ -29,3 +29,6 @@ class TestImageHash(unittest.TestCase):
         twos = imagehash.covert_hex_to_image_hash('010101010101010101010103')
         self.assertEqual(twos - self.ones, 2)
 
+    def test_image_hash_subtraction_is_associative(self):
+        twos = imagehash.covert_hex_to_image_hash('010101010101010101010103')
+        self.assertEqual(twos - self.ones, self.ones - twos)
