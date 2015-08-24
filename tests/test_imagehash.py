@@ -53,14 +53,33 @@ class TestColorHash(TestHashes):
     def test_black_returns_all_zeros(self):
         self.assertEqual(str(imagehash.color_hash(self.black, 2)), '000000000000000000000000')
 
-    def test_blue_returns_all_zeros(self):
+    def test_blue_returns_blue(self):
         self.assertEqual(str(imagehash.color_hash(self.blue, 2)), '0000000000000000ffffffff')
 
-    def test_red_returns_all_zeros(self):
+    def test_red_returns_red(self):
         self.assertEqual(str(imagehash.color_hash(self.red, 2)), 'ffffffff0000000000000000')
 
-    def test_green_returns_all_zeros(self):
+    def test_green_returns_green(self):
         self.assertEqual(str(imagehash.color_hash(self.green, 2)), '000000008080808000000000')
 
-    def test_yellow_returns_all_zeros(self):
+    def test_yellow_returns_yellow(self):
         self.assertEqual(str(imagehash.color_hash(self.yellow, 2)), 'ffffffffffffffff00000000')
+
+class TestGrayScaleHash(TestHashes):
+    def test_white_returns_all_fs(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.white, 2)), 'ffffffff')
+
+    def test_black_returns_all_zeros(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.black, 2)), '00000000')
+
+    def test_blue_returns_all_blue(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.blue, 2)), '1d1d1d1d')
+
+    def test_red_returns_all_red(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.red, 2)), '4c4c4c4c')
+
+    def test_green_returns_all_green(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.green, 2)), '4b4b4b4b')
+
+    def test_yellow_returns_all_yellow(self):
+        self.assertEqual(str(imagehash.grayscale_hash(self.yellow, 2)), 'e1e1e1e1')
