@@ -16,7 +16,7 @@ class ImageHash(object):
         return numpy.array_equal(self.array.flatten(), other.array.flatten())
 
     def __sub__(self, other):
-        return numpy.absolute(self.array.flatten() - other.array.flatten()).sum()
+        return numpy.absolute(self.array.flatten() - other.array.flatten()).sum() / self.array.size
 
 def average_hash(image, hash_size=8):
     '''Take the average of the image'''
